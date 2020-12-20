@@ -56,16 +56,15 @@ export default function RecipeScreen({navigation, route}) {
      setRecipe(data.hits);
 
   }
+  //Function to save recipe image to camera roll
 const test = async (link) => {
   const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
   if (status === "granted") {
-    //store the cached file
           const file = await FileSystem.downloadAsync(
             link,
             FileSystem.documentDirectory + "filename.jpg"
           );
     
-    //save the image in the galery using the link of the cached file
           const assetLink = await MediaLibrary.createAssetAsync(file.uri);
           console.log(file, assetLink);
         }
