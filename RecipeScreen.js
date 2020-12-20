@@ -9,7 +9,6 @@ import Constants from 'expo-constants';
 import * as Permissions from'expo-permissions';
 import{ Camera} from'expo-camera';
 const url = `r.recipe.url`
-const imgurl = `r.recipe.image`
 
 const OpenURLButton = ({ url}) => {
   //When user opens recipe url url is copied to clippboard
@@ -37,7 +36,6 @@ const OpenURLButton = ({ url}) => {
 export default function RecipeScreen({navigation, route}) {
    //set up state for search results
    const [recipes, setRecipe]= useState([])
-   const [fileInfo, setFileInfo] = useState(null);
 
   //Creating useffect function call to fetch recipes
   useEffect (() => {
@@ -57,7 +55,7 @@ export default function RecipeScreen({navigation, route}) {
 
   }
   //Function to save recipe image to camera roll
-const test = async (link) => {
+const downloadImg = async (link) => {
   const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
   if (status === "granted") {
           const file = await FileSystem.downloadAsync(
@@ -67,6 +65,11 @@ const test = async (link) => {
     
           const assetLink = await MediaLibrary.createAssetAsync(file.uri);
           console.log(file, assetLink);
+          ToastAndroid.showWithGravity(
+            'Image downloaded',
+            ToastAndroid.LONG,
+            ToastAndroid.CENTER
+          );
         }
 }
 
@@ -94,7 +97,7 @@ const test = async (link) => {
     ))}
     {/*Button to open recipe url, giving right url as props */}
         <OpenURLButton url={r.recipe.url} />
-        <Button onLongPress={() => test(r.recipe.image)} title='             Download recipe image        '  buttonStyle ={{backgroundColor: '#D5C1B9', marginTop: 10}}/>
+        <Button onLongPress={() => downloadImg(r.recipe.image)} title='             Download recipe image        '  buttonStyle ={{backgroundColor: '#D5C1B9', marginTop: 10}}/>
     </View>
 ))}
       </ScrollView>
